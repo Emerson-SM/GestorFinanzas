@@ -1,3 +1,8 @@
-from app.manage import manage
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import streamlit as st
+import json
+import os
 
-manage()
+st.set_page_config(page_title="Finance Manage", page_icon="🪙", layout="wide")
