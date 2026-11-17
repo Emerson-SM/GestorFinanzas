@@ -27,7 +27,7 @@ def categorize_transactions(df):
         if category == 'Uncategorized' or not keywords:
             continue
 
-    lowered_keywords = [keywords.lower().strip() for keyword in keywords]
+    lowered_keywords = [str(keyword).lower().strip() for keyword in keywords]
 
     for idx, row in df.iterrows():
         details = row['Details'].lower().strip()
@@ -63,9 +63,9 @@ def add_keyword_category(category, keyword):
 
 
 def main_function():
-    st.title("Dashboard For Manage Finances")
+    st.title('Dashboard For Manage Finances')
 
-    upload_file = st.file_uploader("Put here your CSV or Excel file", type=["csv", "excel"])
+    upload_file = st.file_uploader('Put here your CSV or Excel file', type=['csv', 'xlsx', 'xls'])
 
     if upload_file is not None: 
 
@@ -107,22 +107,22 @@ def main_function():
                 save_button = st.button('Apply Changes', type='primary')
                 if save_button:
                     for idx, row in edited_df.iterrows():
-                        new_category = row["Category"]
-                        if new_category == st.session_state.debits.at[idx, "Category"]:
+                        new_category = row['Category']
+                        if new_category == st.session_state.debits.at[idx, 'Category']:
                             continue
                         
-                        details = row["Details"]
-                        st.session_state.debits_df.at[idx, "Category"] = new_category
+                        details = row['Details']
+                        st.session_state.debits.at[idx, 'Category'] = new_category
                         add_keyword_category(new_category, details)
                         
                 st.subheader('Expense Summary')
-                category_totals = st.session_state.debits_df.groupby("Category")["Amount"].sum().reset_index()
-                category_totals = category_totals.sort_values("Amount", ascending=False)
+                category_totals = st.session_state.debits.groupby('Category')['Amount'].sum().reset_index()
+                category_totals = category_totals.sort_values('Amount', ascending=False)
                 
                 st.dataframe(
                     category_totals, 
                     column_config={
-                     "Amount": st.column_config.NumberColumn("Amount", format="%.2f AED")   
+                     'Amount': st.column_config.NumberColumn('Amount', format='%.2f AED')   
                     },
                     use_container_width=True,
                     hide_index=True
@@ -130,14 +130,14 @@ def main_function():
                 
                 fig = px.pie(
                     category_totals,
-                    values="Amount",
-                    names="Category",
-                    title="Expenses by Category"
+                    values='Amount',
+                    names='Category',
+                    title='Expenses by Category'
                 )
                 st.plotly_chart(fig, use_container_width=True)
                 
             with table2:
-                st.subheader("Payments Summary")
-                total_payments = credits["Amount"].sum()
-                st.metric("Total Payments", f"{total_payments:,.2f} AED")
+                st.subheader('Payments Summary')
+                total_payments = credits['Amount'].sum()
+                st.metric('Total Payments', f'{total_payments:,.2f} AED')
                 st.write(credits)
