@@ -20,8 +20,23 @@ def save_categories():
     with open(file_json, 'w') as f:
         json.dump(st.session_state.categories, f)
 
-def load_transactions(file):
+def categorize_transactions(df):
+    df['Category'] = 'Uncategorized'
 
+    for category, keywords in st.session_state.categories.items():
+        if category == 'Uncategorized' or not keywords:
+            continue
+
+    lowered_keywords = [keywords.lower().strip() for keyword in keywords]
+
+    for idx, row in df.iterrows():
+        details = row['Details'].lower().strip()
+        if details in lowered_keywords:
+            df.at[idx, 'Category'] = category
+
+    return df
+
+def load_transactions(file):
     file_name = file.name.lower()
     try:
         if file_name.endswith(('.csv')):
@@ -35,7 +50,7 @@ def load_transactions(file):
 
         st.write(df)
 
-        return df
+        return categorize_transactions(df)
     except Exception as e:
         st.error(f'Error processing file: {str(e)}')
         return None
