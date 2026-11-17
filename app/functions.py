@@ -48,12 +48,19 @@ def load_transactions(file):
         df['Amount'] = df['Amount'].str.replace(',', '').astype(float)
         df['Date'] = pd.to_datetime(df['Date'], format='%d %b %Y')
 
-        st.write(df)
-
         return categorize_transactions(df)
     except Exception as e:
         st.error(f'Error processing file: {str(e)}')
         return None
+
+def add_keyword_category(category, keyword):
+    keyword = keyword.strip()
+    if keyword and keyword not in st.session_state.categories[category]:
+        st.session_state.categories[category].append(keyword)
+        save_categories()
+        return True
+    return False
+
 
 def main_function():
     st.title("Dashboard For Manage Finances")
@@ -68,6 +75,8 @@ def main_function():
             debits = df[df['Debit/Credit'] == 'Debit'].copy()
             credits = df[df['Debit/Credit'] == 'Credit'].copy()
 
+            st.session_state.debits = debits.copy()
+
             table1, table2 = st.tabs(['Expensives (Debits)', 'Payments (Credits)'])
 
             with table1:
@@ -79,7 +88,56 @@ def main_function():
                         st.session_state.categories[new_category] = []
                         save_categories()
                         st.rerun()
-                st.write(debits)
 
+                st.subheader('Your Expenses')
+                edited_df = st.data_editor(
+                    st.session_state.debits[['Date', 'Details', 'Amount', 'Category']],
+                    column_config={
+                        'Date': st.column_config.DateColumn('Date', format='DD/MM/YYYY'),
+                        'Amount': st.column_config.NumberColumn('Amount', format='%.2f AED'),
+                        'Category': st.column_config.SelectboxColumn(
+                        'Category',
+                            options=list(st.session_state.categories.keys())
+                        )
+                    },
+                    hide_index=True,
+                    use_container_width=True,
+                    key='category_editor'
+                )
+                save_button = st.button('Apply Changes', type='primary')
+                if save_button:
+                    for idx, row in edited_df.iterrows():
+                        new_category = row["Category"]
+                        if new_category == st.session_state.debits.at[idx, "Category"]:
+                            continue
+                        
+                        details = row["Details"]
+                        st.session_state.debits_df.at[idx, "Category"] = new_category
+                        add_keyword_category(new_category, details)
+                        
+                st.subheader('Expense Summary')
+                category_totals = st.session_state.debits_df.groupby("Category")["Amount"].sum().reset_index()
+                category_totals = category_totals.sort_values("Amount", ascending=False)
+                
+                st.dataframe(
+                    category_totals, 
+                    column_config={
+                     "Amount": st.column_config.NumberColumn("Amount", format="%.2f AED")   
+                    },
+                    use_container_width=True,
+                    hide_index=True
+                )
+                
+                fig = px.pie(
+                    category_totals,
+                    values="Amount",
+                    names="Category",
+                    title="Expenses by Category"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+                
             with table2:
+                st.subheader("Payments Summary")
+                total_payments = credits["Amount"].sum()
+                st.metric("Total Payments", f"{total_payments:,.2f} AED")
                 st.write(credits)
