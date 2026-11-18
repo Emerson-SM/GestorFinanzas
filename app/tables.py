@@ -67,8 +67,8 @@ def create_tables(t1, t2):
                 
     with t2:
         st.subheader('Payments Summary')
-        total_payments = credits['Amount'].sum()
+        total_payments = st.session_state.credits['Amount'].sum()
         st.metric('Total Payments', f'{total_payments:,.2f} AED')
-        st.write(credits) 
+        st.write(st.session_state.credits)
 
     return t1, t2  

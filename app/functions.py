@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import streamlit as st
 import json
 import os
 from app.tables import create_tables
@@ -71,13 +69,13 @@ def main_function():
 
         df = load_transactions(upload_file)
 
-        debits = df[df["Debit/Credit"] == "Debit"].copy()
-        credits = df[df["Debit/Credit"] == "Credit"].copy()
-            
-        st.session_state.debits = debits.copy()
-        st.session_state.credits = credits.copy()
-
         if df is not None:
+
+            debits = df[df["Debit/Credit"] == "Debit"].copy()
+            credits = df[df["Debit/Credit"] == "Credit"].copy()
+                        
+            st.session_state.debits = debits.copy()
+            st.session_state.credits = credits.copy()
 
             table1, table2 = st.tabs(
                 ['Expensives (Debits)', 'Payments (Credits)']
