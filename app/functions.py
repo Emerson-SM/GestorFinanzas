@@ -7,14 +7,15 @@ from app.styles import apply_custom_styles
 
 file_json = 'categories.json'
 
-if 'categories' not in st.session_state:
-    st.session_state.categories = {
-        'Uncategorized': []
-    }
-
-if os.path.exists(file_json):
-    with open(file_json, 'r') as f:
-        st.session_state.categories = json.load(f)
+def initialize_categories():    
+    if 'categories' not in st.session_state:
+        if os.path.exists(file_json):
+            with open(file_json, 'r') as f:
+                st.session_state.categories = json.load(f)
+    else:
+        st.session_state.categories = {
+            'Uncategorized': []
+        }
 
 def save_categories():
     with open(file_json, 'w') as f:
@@ -62,6 +63,8 @@ def add_keyword_category(category, keyword):
     return False
 
 def main_function():
+
+    initialize_categories()
 
     apply_custom_styles()
 
