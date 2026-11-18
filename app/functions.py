@@ -4,7 +4,7 @@ import plotly.express as px
 import streamlit as st
 import json
 import os
-from app.tables import create_tables
+from tables import create_tables
 
 file_json = 'categories.json'
 
