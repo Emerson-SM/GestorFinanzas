@@ -4,7 +4,7 @@ import plotly.express as px
 import streamlit as st
 import json
 import os
-from tables import create_tables
+from app.tables import create_tables
 
 file_json = 'categories.json'
 
@@ -28,12 +28,12 @@ def categorize_transactions(df):
         if category == 'Uncategorized' or not keywords:
             continue
 
-    lowered_keywords = [str(keyword).lower().strip() for keyword in keywords]
+        lowered_keywords = [str(keyword).lower().strip() for keyword in keywords]
 
-    for idx, row in df.iterrows():
-        details = row['Details'].lower().strip()
-        if details in lowered_keywords:
-            df.at[idx, 'Category'] = category
+        for idx, row in df.iterrows():
+            details = row['Details'].lower().strip()
+            if details in lowered_keywords:
+                df.at[idx, 'Category'] = category
 
     return df
 
@@ -71,16 +71,16 @@ def main_function():
 
         df = load_transactions(upload_file)
 
-        if df is not None:
-            debits = df[df['Debit/Credit'] == 'Debit'].copy()
-            credits = df[df['Debit/Credit'] == 'Credit'].copy()
-
-            st.session_state.debits = debits.copy()
-            st.session_state.credits = credits.copy()
-
-            table1 = st.tabs(['Expensives (Debits)'])
-            table2 = st.tabs(['Payments (Credits)'])
-
-            create_tables(table1, table2)
-
+        debits = df[df["Debit/Credit"] == "Debit"].copy()
+        credits = df[df["Debit/Credit"] == "Credit"].copy()
             
+        st.session_state.debits = debits.copy()
+        st.session_state.credits = credits.copy()
+
+        if df is not None:
+
+            table1, table2 = st.tabs(
+                ['Expensives (Debits)', 'Payments (Credits)']
+            )
+
+            create_tables(table1, table2)      
