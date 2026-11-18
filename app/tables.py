@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from functions import save_categories, add_keyword_category
+from app.functions import save_categories, add_keyword_category
 
 def create_tables(t1, t2):
     with t1:
