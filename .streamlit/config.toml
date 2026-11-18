@@ -1,0 +1,43 @@
+
+[theme]
+
+# Tema oscuro
+base = "dark"
+
+# Color principal: botones, selección y elementos interactivos
+primaryColor = "#10B981"
+
+# Fondo general de la aplicación
+backgroundColor = "#0E1117"
+
+# Fondo de widgets, tablas y paneles
+secondaryBackgroundColor = "#1B2330"
+
+# Color del texto
+textColor = "#E6EDF3"
+
+# Tipografía
+font = "sans serif"
+
+# Bordes
+borderColor = "#303B4B"
+
+# Colores para los gráficos
+chartCategoricalColors = [
+    "#10B981",
+    "#3B82F6",
+    "#F59E0B",
+    "#8B5CF6",
+    "#EF4444",
+    "#06B6D4",
+    "#EC4899",
+    "#84CC16"
+]
+
+# Configuración del sidebar
+[theme.sidebar]
+
+backgroundColor = "#111827"
+secondaryBackgroundColor = "#1B2330"
+textColor = "#E6EDF3"
+primaryColor = "#10B981"

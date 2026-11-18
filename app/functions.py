@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import os
 from app.tables import create_tables
+from app.styles import apply_custom_styles
 
 file_json = 'categories.json'
 
@@ -61,6 +62,9 @@ def add_keyword_category(category, keyword):
     return False
 
 def main_function():
+
+    apply_custom_styles()
+
     st.title('Personal Finance Analytics Dashboard')
 
     upload_file = st.file_uploader('Put here your CSV or Excel file', type=['csv', 'xlsx', 'xls'])
