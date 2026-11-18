@@ -6,11 +6,13 @@ from app.tables import create_tables
 from app.styles import apply_custom_styles
 
 file_json = 'categories.json'
-  
-if 'categories' not in st.session_state:
-    st.session_state.categories = {
-        'Uncategorized': []
-    }
+
+def initialize_categories():  
+    if 'categories' not in st.session_state:
+        st.session_state.categories = {
+            'Uncategorized': []
+        }
+
     if os.path.exists(file_json):
         with open(file_json, 'r') as f:
             st.session_state.categories = json.load(f)
@@ -62,9 +64,9 @@ def add_keyword_category(category, keyword):
 
 def main_function():
 
-    apply_custom_styles()
+    initialize_categories()
 
-    save_categories()
+    apply_custom_styles()
 
     st.title('Personal Finance Analytics Dashboard')
 
