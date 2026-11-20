@@ -46,7 +46,6 @@ GestorFinanzas/
 │   └── styles.py
 │
 ├── main.py
-├── categories.json
 └── requirements.txt
 ```
 
