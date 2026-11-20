@@ -152,7 +152,7 @@ Planned improvements include:
 
 **Emerson Solano**
 
-Aspiring Data Analyst | Python Developer
+ Data Analyst | Python Developer
 
 GitHub: [Emerson-SM](https://github.com/Emerson-SM)
 
