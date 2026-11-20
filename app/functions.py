@@ -70,6 +70,10 @@ def main_function():
 
     st.title('Personal Finance Analytics Dashboard')
 
+    url_download = 'https://drive.google.com/file/d/1B96K2LL39ZriqiMIAjZJ9eLgXfgtF98s/view?usp=sharing'
+
+    st.markdown(f'Download an [example CSV file]( {url_download}) here')
+
     upload_file = st.file_uploader('Put here your CSV or Excel file', type=['csv', 'xlsx', 'xls'])
 
     if upload_file is not None: 
